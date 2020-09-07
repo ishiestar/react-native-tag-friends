@@ -14,6 +14,8 @@ import EU from './EditorUtils';
 import styles from './EditorStyles';
 import MentionList from './MentionList';
 
+export const EU;
+
 export class Editor extends React.Component {
   static propTypes = {
     list: PropTypes.array,
