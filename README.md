@@ -21,7 +21,7 @@ import Editor from 'react-native-mention-editor';
    editorStyles={{
       mainContainer: style.textInputStyle,
       inputMaskText: { fontFamily: font.regular }, //important to make sure input and 
-      input: { fontFamily: font.regular },         //inputMastText styles match exactly
+      input: { fontFamily: font.regular },         //inputMaskText styles match exactly
    }}
    displayKey="name"   //specify which key in the user object to display
    extractionKey="username" //specify which key is to be treated as the unique ID of user objects
@@ -94,7 +94,8 @@ import Editor from 'react-native-mention-editor';
 
 **`editorStyles: object`** This object will contain the overriding styles for different nodes. Check the below object to see how you can override styles.
 
-```editorStyles: {
+```javascript
+editorStyles: {
     mainContainer: {}, 
     editorContainer: {...}, 
     inputMaskTextWrapper: {},
