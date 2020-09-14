@@ -29,6 +29,7 @@ export class Editor extends React.Component {
     editorStyles: PropTypes.object,
     placeholder: PropTypes.string,
     renderMentionList: PropTypes.func,
+    loading: PropTypes.bool
   };
 
   constructor(props) {
@@ -544,6 +545,7 @@ export class Editor extends React.Component {
           props.renderMentionList(mentionListProps)
         ) : (
           <MentionList
+            loading={props.loading}
             list={props.list}
             keyword={state.keyword}
             isTrackingStarted={state.isTrackingStarted}

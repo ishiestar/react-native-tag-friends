@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import MentionListItem from './MentionListItem';
+import { isEmpty } from 'lodash';
 // Styles
 const styles = StyleSheet.create({
   container: {
@@ -49,6 +50,7 @@ export class MentionList extends React.PureComponent {
     if (!isTrackingStarted) {
       return null;
     }
+    if(!props.loading && isEmpty(suggestions)) return null;
     return (
       <Animated.View
         style={[
@@ -65,7 +67,7 @@ export class MentionList extends React.PureComponent {
             </View>
           }
           enableEmptySections={true}
-          data={suggestions}
+          data={list}
           keyExtractor={(item, index) => `${item.id}-${index}`}
           renderItem={rowData => {
             return this.renderSuggestionsRow(rowData);
