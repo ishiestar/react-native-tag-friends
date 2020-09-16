@@ -29,7 +29,7 @@ export class Editor extends React.Component {
     editorStyles: PropTypes.object,
     placeholder: PropTypes.string,
     renderMentionList: PropTypes.func,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
   };
 
   constructor(props) {
@@ -577,7 +577,11 @@ export class Editor extends React.Component {
               </View>
               <TextInput
                 ref={input => props.onRef && props.onRef(input)}
-                style={[styles.input, editorStyles.input]}
+                style={[
+                  styles.input,
+                  editorStyles.input,
+                  Platform.OS === 'android' ? styles.androidInputMask : null,
+                ]}
                 multiline
                 autoFocus
                 numberOfLines={100}

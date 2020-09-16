@@ -18,11 +18,14 @@ export default StyleSheet.create({
     fontWeight: '400',
     // paddingHorizontal: 20,
     minHeight: 40,
-    position: 'absolute',
-    top: 0,
+    textAlignVertical: 'top',
     color: 'transparent',
     alignSelf: 'stretch',
     width: '100%',
+  },
+  androidInputMask: {
+    marginTop: -10,
+    marginStart: -4,
   },
   formmatedTextWrapper: {
     minHeight: 40,

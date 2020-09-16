@@ -39,8 +39,8 @@ export class MentionList extends React.PureComponent {
   };
   render() {
     const { props } = this;
-
     const { keyword, isTrackingStarted } = props;
+
     const withoutAtKeyword = keyword.substr(1, keyword.length);
     const list = this.props.list;
     const suggestions =
@@ -50,7 +50,7 @@ export class MentionList extends React.PureComponent {
     if (!isTrackingStarted) {
       return null;
     }
-    if(!props.loading && isEmpty(suggestions)) return null;
+    if (!props.loading && isEmpty(suggestions)) return null;
     return (
       <Animated.View
         style={[
