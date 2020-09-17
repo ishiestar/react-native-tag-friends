@@ -37,8 +37,16 @@ export class Editor extends React.Component {
     this.mentionsMap = new Map();
     let msg = '';
     let formattedMsg = '';
-    if (props.initialValue && props.initialValue !== '') {
-      const { map, newValue } = EU.getMentionsWithInputText(props.initialValue);
+    const { initialValue, extractionKey, displayKey } = props;
+    if (!extractionKey) extractionKey = 'id';
+    if (!displayKey) displayKey = 'username';
+
+    if (initialValue && initialValue !== '') {
+      const { map, newValue } = EU.getMentionsWithInputText(
+        initialValue,
+        extractionKey,
+        displayKey,
+      );
       this.mentionsMap = map;
       msg = newValue;
       formattedMsg = this.formatText(newValue);
@@ -98,6 +106,29 @@ export class Editor extends React.Component {
         formattedText: '',
       });
       this.mentionsMap.clear();
+    }
+    if (prevState.inputText === '' && this.props.initialValue) {
+      this.mentionsMap = new Map();
+      let msg = '';
+      let formattedMsg = '';
+      const { initialValue, extractionKey, displayKey } = this.props;
+      if (!extractionKey) extractionKey = 'id';
+      if (!displayKey) displayKey = 'username';
+
+      if (initialValue && initialValue !== '') {
+        const { map, newValue } = EU.getMentionsWithInputText(
+          initialValue,
+          extractionKey,
+          displayKey,
+        );
+        this.mentionsMap = map;
+        msg = newValue;
+        formattedMsg = this.formatText(newValue);
+        setTimeout(() => {
+          this.sendMessageToFooter(newValue);
+        });
+      }
+      this.setState({ inputText: msg, formattedText: formattedMsg });
     }
 
     if (EU.whenTrue(this.props, prevProps, 'showMentions')) {
@@ -235,7 +266,9 @@ export class Editor extends React.Component {
       adjMentIndexes,
     );
     mentionKeys.forEach(key => {
-      remStr = `@${this.mentionsMap.get(key).username} ${remStr}`;
+      remStr = `@${
+        this.mentionsMap.get(key)[this.props.displayKey || 'username']
+      } ${remStr}`;
     });
     return {
       initialStr,
@@ -576,14 +609,14 @@ export class Editor extends React.Component {
                 ) : null}
               </View>
               <TextInput
-                ref={input => props.onRef && props.onRef(input)}
+                ref={props.onRef}
                 style={[
                   styles.input,
                   editorStyles.input,
                   Platform.OS === 'android' ? styles.androidInputMask : null,
                 ]}
                 multiline
-                autoFocus
+                autoFocus={props.autoFocus}
                 numberOfLines={100}
                 name={'message'}
                 value={state.inputText}

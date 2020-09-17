@@ -3,7 +3,12 @@
  * functions for our Editor
  */
 
-export const displayTextWithMentions = (inputText, formatMentionNode) => {
+export const displayTextWithMentions = (
+  inputText,
+  formatMentionNode,
+  extractionKey,
+  displayKey,
+) => {
   /**
    * Use this function to parse mentions markup @[username](id) in the string value.
    */
@@ -13,7 +18,7 @@ export const displayTextWithMentions = (inputText, formatMentionNode) => {
   const retLines = inputText.split('\n');
   const formattedText = [];
   retLines.forEach((retLine, rowIndex) => {
-    const mentions = EU.findMentions(retLine);
+    const mentions = EU.findMentions(retLine, extractionKey, displayKey);
     if (mentions.length) {
       let lastIndex = 0;
       mentions.forEach((men, index) => {
@@ -21,8 +26,8 @@ export const displayTextWithMentions = (inputText, formatMentionNode) => {
         lastIndex = men.end + 1;
         formattedText.push(initialStr);
         const formattedMention = formatMentionNode(
-          `@${men.username}`,
-          `${index}-${men.id}-${rowIndex}`,
+          `@${men[displayKey]}`,
+          `${index}-${men[extractionKey]}-${rowIndex}`,
         );
         formattedText.push(formattedMention);
         if (mentions.length - 1 === index) {
@@ -150,7 +155,7 @@ export const EU = {
   sum: (x, y) => x + y,
   diff: (x, y) => Math.abs(x - y),
   isEmpty: str => str === '',
-  getMentionsWithInputText: inputText => {
+  getMentionsWithInputText: (inputText, extractionKey, displayKey) => {
     /**
      * translate provided string e.g. `Hey @mrazadar this is good work.`
      * populate mentions map with [start, end] : {...user}
@@ -166,18 +171,18 @@ export const EU = {
     const retLines = inputText.split('\n');
 
     retLines.forEach((retLine, rowIndex) => {
-      const mentions = EU.findMentions(retLine);
+      const mentions = EU.findMentions(retLine, extractionKey, displayKey);
       if (mentions.length) {
         let lastIndex = 0;
         let endIndexDiff = 0;
         mentions.forEach((men, index) => {
           newValue = newValue.concat(retLine.substring(lastIndex, men.start));
-          const username = `@${men.username}`;
+          const username = `@${men[displayKey]}`;
           newValue = newValue.concat(username);
           const menEndIndex = men.start + (username.length - 1);
           map.set([men.start - endIndexDiff, menEndIndex - endIndexDiff], {
-            id: men.id,
-            username: men.username,
+            [extractionKey]: men[extractionKey],
+            [displayKey]: men[displayKey],
           });
           //indexes diff with the new formatted string.
           endIndexDiff = endIndexDiff + Math.abs(men.end - menEndIndex);
@@ -200,7 +205,7 @@ export const EU = {
       newValue,
     };
   },
-  findMentions: val => {
+  findMentions: (val, extractionKey, displayKey) => {
     /**
      * Both Mentions and Selections are 0-th index based in the strings
      * meaning their indexes in the string start from 0
@@ -215,8 +220,8 @@ export const EU = {
       indexes.push({
         start: match.index,
         end: reg.lastIndex - 1,
-        username: match[1],
-        id: match[2],
+        [displayKey]: match[1],
+        [extractionKey]: match[2],
         type: EU.specialTagsEnum.mention,
       });
     }

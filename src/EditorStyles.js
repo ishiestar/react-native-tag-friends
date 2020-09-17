@@ -5,7 +5,6 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
     borderColor: 'green',
     borderWidth: 1,
-    // width: 300,
   },
   textContainer: {
     alignSelf: 'stretch',
@@ -16,7 +15,6 @@ export default StyleSheet.create({
   input: {
     fontSize: 16,
     fontWeight: '400',
-    // paddingHorizontal: 20,
     minHeight: 40,
     textAlignVertical: 'top',
     color: 'transparent',
@@ -26,6 +24,7 @@ export default StyleSheet.create({
   androidInputMask: {
     marginTop: -10,
     marginStart: -4,
+    width: '103%',
   },
   formmatedTextWrapper: {
     minHeight: 40,
