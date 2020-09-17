@@ -6,6 +6,7 @@ Based on the code in https://github.com/mrazadar/react-native-mentions-editor. S
 
 - Removed backward typing bug
 - Fixed cursor not showing on Android
+- Can edit existing text with @ mentions
 - Can customize user objects as needed
 - Can change the key with which to extract display name of user (**@Full Name** instead of **@username**, for instance)
 
