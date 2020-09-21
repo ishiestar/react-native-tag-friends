@@ -30,6 +30,8 @@ export class Editor extends React.Component {
     placeholder: PropTypes.string,
     renderMentionList: PropTypes.func,
     loading: PropTypes.bool,
+    autoFocus: PropTypes.bool,
+    shouldShowMentionsBelow: PropTypes.bool,
   };
 
   constructor(props) {
@@ -556,6 +558,67 @@ export class Editor extends React.Component {
     }
   };
 
+  renderEditor = editorStyles => (
+    <View style={[styles.container, editorStyles.mainContainer]}>
+      <ScrollView
+        ref={scroll => {
+          this.scroll = scroll;
+        }}
+        onContentSizeChange={() => {
+          this.scroll.scrollToEnd({ animated: true });
+        }}
+        style={[styles.editorContainer, editorStyles.editorContainer]}>
+        <View style={[{ height: this.state.editorHeight }]}>
+          <View
+            style={[
+              styles.formmatedTextWrapper,
+              editorStyles.inputMaskTextWrapper,
+            ]}>
+            {this.state.formattedText !== '' ? (
+              <Text style={[styles.formmatedText, editorStyles.inputMaskText]}>
+                {this.state.formattedText}
+              </Text>
+            ) : null}
+          </View>
+          <TextInput
+            ref={this.props.onRef}
+            style={[
+              styles.input,
+              editorStyles.input,
+              Platform.OS === 'android' ? styles.androidInputMask : null,
+            ]}
+            multiline
+            autoFocus={this.props.autoFocus}
+            numberOfLines={100}
+            name={'message'}
+            value={this.state.inputText}
+            onBlur={this.props.toggleEditor}
+            onChangeText={this.onChange}
+            selectionColor={'#000'}
+            onSelectionChange={this.handleSelectionChange}
+            placeholder={this.state.placeholder}
+            onContentSizeChange={this.onContentSizeChange}
+            scrollEnabled={false}
+          />
+        </View>
+      </ScrollView>
+    </View>
+  );
+
+  renderMentionList = mentionListProps =>
+    this.props.renderMentionList ? (
+      props.renderMentionList(mentionListProps)
+    ) : (
+      <MentionList
+        loading={this.props.loading}
+        list={this.props.list}
+        keyword={this.state.keyword}
+        isTrackingStarted={this.state.isTrackingStarted}
+        onSuggestionTap={this.onSuggestionTap}
+        editorStyles={this.props.editorStyles}
+      />
+    );
+
   render() {
     const { props, state } = this;
     const { editorStyles = {} } = props;
@@ -574,63 +637,13 @@ export class Editor extends React.Component {
 
     return (
       <View styles={editorStyles.mainContainer}>
-        {props.renderMentionList ? (
-          props.renderMentionList(mentionListProps)
-        ) : (
-          <MentionList
-            loading={props.loading}
-            list={props.list}
-            keyword={state.keyword}
-            isTrackingStarted={state.isTrackingStarted}
-            onSuggestionTap={this.onSuggestionTap}
-            editorStyles={editorStyles}
-          />
-        )}
-        <View style={[styles.container, editorStyles.mainContainer]}>
-          <ScrollView
-            ref={scroll => {
-              this.scroll = scroll;
-            }}
-            onContentSizeChange={() => {
-              this.scroll.scrollToEnd({ animated: true });
-            }}
-            style={[styles.editorContainer, editorStyles.editorContainer]}>
-            <View style={[{ height: this.state.editorHeight }]}>
-              <View
-                style={[
-                  styles.formmatedTextWrapper,
-                  editorStyles.inputMaskTextWrapper,
-                ]}>
-                {state.formattedText !== '' ? (
-                  <Text
-                    style={[styles.formmatedText, editorStyles.inputMaskText]}>
-                    {state.formattedText}
-                  </Text>
-                ) : null}
-              </View>
-              <TextInput
-                ref={props.onRef}
-                style={[
-                  styles.input,
-                  editorStyles.input,
-                  Platform.OS === 'android' ? styles.androidInputMask : null,
-                ]}
-                multiline
-                autoFocus={props.autoFocus}
-                numberOfLines={100}
-                name={'message'}
-                value={state.inputText}
-                onBlur={props.toggleEditor}
-                onChangeText={this.onChange}
-                selectionColor={'#000'}
-                onSelectionChange={this.handleSelectionChange}
-                placeholder={state.placeholder}
-                onContentSizeChange={this.onContentSizeChange}
-                scrollEnabled={false}
-              />
-            </View>
-          </ScrollView>
-        </View>
+        {props.shouldShowMentionsBelow
+          ? null
+          : this.renderMentionList(mentionListProps)}
+        {this.renderEditor(editorStyles)}
+        {props.shouldShowMentionsBelow
+          ? this.renderMentionList(mentionListProps)
+          : null}
       </View>
     );
   }
