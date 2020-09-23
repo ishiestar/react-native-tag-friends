@@ -8,7 +8,9 @@ Based on the code in https://github.com/mrazadar/react-native-mentions-editor. S
 - Fixed cursor not showing on Android
 - Can edit existing text with @ mentions
 - Can customize user objects as needed
+- Can show custom secondary text in mention items
 - Can change the key with which to extract display name of user (**@Full Name** instead of **@username**, for instance)
+- Can show mention list above or below editor as needed
 
 ## Getting started
 
@@ -28,6 +30,7 @@ import Editor from 'react-native-mention-editor';
   }}
   displayKey="name" //specify which key in the user object to display
   extractionKey="username" //specify which key is to be treated as the unique ID of user objects
+  secondaryKey="speciality" //specify what to show in the second line. Omit this prop if you don't need a second line
   showEditor
   onHideMentions={() => this.setState({ showMentions: false })}
   clearInput={this.state.clearInput}
@@ -82,7 +85,7 @@ export const formatMentionTextToApiFormat = inputText => {
 
 **`initialValue: string`** Use this to initialize TextInput with the initial value. Usage. initalValue: "Hey @[mrazadar](id:1) this is good work"
 
-**`clearInput: bool`** When true input will be clear automatically.
+**`clearInput: bool`** When true input will be cleared automatically.
 
 **`onChange: function`** This function will be called on input change event.
 
@@ -91,6 +94,8 @@ export const formatMentionTextToApiFormat = inputText => {
 **`toggleEditor: function`** Use this to handle blur event on input.
 
 **`showMentions: bool`** Use this property to programmatically trigger the mentionsList this will add @ character in the value.
+
+**`shouldShowMentionsBelow: bool`** When true, the list of mentions will be shown below the editor instead of above.
 
 **`onHideMentions: function`** This callback will be called when user stop tracking of mention.
 

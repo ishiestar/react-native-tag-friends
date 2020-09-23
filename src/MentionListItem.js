@@ -47,7 +47,13 @@ export class MentionListItem extends React.PureComponent {
   };
 
   render() {
-    const { item: user, index, editorStyles } = this.props;
+    const {
+      item: user,
+      index,
+      editorStyles,
+      displayKey,
+      secondaryKey,
+    } = this.props;
     return (
       <View>
         <TouchableOpacity
@@ -63,12 +69,16 @@ export class MentionListItem extends React.PureComponent {
           </View>
           <View style={[styles.text, editorStyles.mentionListItemTextWrapper]}>
             <Text style={[styles.title, editorStyles.mentionListItemTitle]}>
-              {user.name}
+              {user[displayKey]}
             </Text>
-            <Text
-              style={[styles.username, editorStyles.mentionListItemUsername]}>
-              @{user.username}
-            </Text>
+            {secondaryKey ? (
+              <Text
+                style={[styles.username, editorStyles.mentionListItemUsername]}>
+                {user[secondaryKey]}
+              </Text>
+            ) : (
+              <></>
+            )}
           </View>
         </TouchableOpacity>
       </View>

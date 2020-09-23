@@ -31,6 +31,8 @@ export class MentionList extends React.PureComponent {
   renderSuggestionsRow = ({ item }) => {
     return (
       <MentionListItem
+        secondaryKey={this.props.secondaryKey}
+        displayKey={this.props.displayKey}
         onSuggestionTap={this.props.onSuggestionTap}
         item={item}
         editorStyles={this.props.editorStyles}
@@ -45,12 +47,18 @@ export class MentionList extends React.PureComponent {
     const list = this.props.list;
     const suggestions =
       withoutAtKeyword !== ''
-        ? list.filter(user => user.username.includes(withoutAtKeyword))
+        ? list.filter(user => {
+            return user[props.displayKey]
+              .toLowerCase()
+              .includes(withoutAtKeyword.toLowerCase());
+          })
         : list;
+
     if (!isTrackingStarted) {
       return null;
     }
     if (!props.loading && isEmpty(suggestions)) return null;
+
     return (
       <Animated.View
         style={[
@@ -67,7 +75,7 @@ export class MentionList extends React.PureComponent {
             </View>
           }
           enableEmptySections={true}
-          data={list}
+          data={suggestions}
           keyExtractor={(item, index) => `${item.id}-${index}`}
           renderItem={rowData => {
             return this.renderSuggestionsRow(rowData);

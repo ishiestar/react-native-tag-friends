@@ -610,6 +610,8 @@ export class Editor extends React.Component {
       props.renderMentionList(mentionListProps)
     ) : (
       <MentionList
+        displayKey={this.props.displayKey || 'username'}
+        secondaryKey={this.props.secondaryKey}
         loading={this.props.loading}
         list={this.props.list}
         keyword={this.state.keyword}
