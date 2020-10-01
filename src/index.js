@@ -220,6 +220,19 @@ export class Editor extends React.Component {
       this.state.triggerLocation === 'new-word-only'
         ? this.previousChar.trim().length === 0
         : true;
+    if (
+      inputText.includes('@') &&
+      !this.state.isTrackingStarted &&
+      inputText.substring(inputText.lastIndexOf('@'), inputText.length) ===
+        inputText.substring(inputText.lastIndexOf(' ') + 1, inputText.length)
+    ) {
+      //Making sure mentions are tracked when space character is deleted after an
+      //@ tagged keyword
+      this.startTracking(inputText.lastIndexOf('@'));
+      this.updateSuggestions(
+        inputText.substring(inputText.lastIndexOf('@') + 1, inputText.length),
+      );
+    }
     if (lastChar === this.state.trigger && wordBoundry) {
       this.startTracking(menIndex);
     } else if (lastChar.trim() === '' && this.state.isTrackingStarted) {
