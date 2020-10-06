@@ -12,16 +12,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     color: 'rgba(0, 0, 0, 0.1)',
     paddingHorizontal: 20,
-    paddingVertical: 4,
     borderBottomWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   text: {
     alignSelf: 'center',
     marginLeft: 12,
+    marginBottom: 4,
   },
   title: {
     fontSize: 16,
+    marginEnd: 16,
     color: 'rgba(0, 0, 0, 0.8)',
   },
   thumbnailWrapper: {
@@ -55,33 +56,29 @@ export class MentionListItem extends React.PureComponent {
       secondaryKey,
     } = this.props;
     return (
-      <View>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          style={[styles.suggestionItem, editorStyles.mentionListItemWrapper]}
-          onPress={() => this.onSuggestionTap(user)}>
-          <View style={[styles.wrapper, styles.thumbnailWrapper]}>
-            <Image
-              style={[styles.wrapper, styles.thumbnailWrapper]}
-              resizeMode="cover"
-              source={{ uri: user.avatar }}
-            />
-          </View>
-          <View style={[styles.text, editorStyles.mentionListItemTextWrapper]}>
-            <Text style={[styles.title, editorStyles.mentionListItemTitle]}>
-              {user[displayKey]}
+      <TouchableOpacity
+        activeOpacity={0.8}
+        style={[styles.suggestionItem, editorStyles.mentionListItemWrapper]}
+        onPress={() => this.onSuggestionTap(user)}>
+        <Image
+          style={[styles.wrapper, styles.thumbnailWrapper]}
+          resizeMode="cover"
+          source={{ uri: user.avatar }}
+        />
+        <View style={[styles.text, editorStyles.mentionListItemTextWrapper]}>
+          <Text style={[styles.title, editorStyles.mentionListItemTitle]}>
+            {user[displayKey]}
+          </Text>
+          {secondaryKey ? (
+            <Text
+              style={[styles.username, editorStyles.mentionListItemUsername]}>
+              {user[secondaryKey]}
             </Text>
-            {secondaryKey ? (
-              <Text
-                style={[styles.username, editorStyles.mentionListItemUsername]}>
-                {user[secondaryKey]}
-              </Text>
-            ) : (
-              <></>
-            )}
-          </View>
-        </TouchableOpacity>
-      </View>
+          ) : (
+            <></>
+          )}
+        </View>
+      </TouchableOpacity>
     );
   }
 }

@@ -6,19 +6,17 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
-
 import MentionListItem from './MentionListItem';
 import { isEmpty } from 'lodash';
 // Styles
 const styles = StyleSheet.create({
   container: {
-    // flex:1,
     maxHeight: 300,
   },
   suggestionsPanelStyle: {},
   loaderContainer: {},
   mentionsListContainer: {
-    height: 100,
+    // maxHeight: 100,
   },
 });
 
@@ -66,6 +64,7 @@ export class MentionList extends React.PureComponent {
           this.props.editorStyles.mentionsListWrapper,
         ]}>
         <FlatList
+          nestedScrollEnabled
           style={styles.mentionsListContainer}
           keyboardShouldPersistTaps={'always'}
           horizontal={false}

@@ -8,6 +8,7 @@ import {
   Animated,
   Platform,
   ScrollView,
+  Keyboard,
 } from 'react-native';
 
 import EU from './EditorUtils';
@@ -98,6 +99,18 @@ export class Editor extends React.Component {
       };
     }
     return null;
+  }
+
+  _keyboardDidHide = () => {
+    this.stopTracking();
+  };
+
+  componentDidMount() {
+    Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+  }
+
+  componentWillUnmount() {
+    Keyboard.removeListener('keyboardDidHide', this._keyboardDidHide);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -620,7 +633,7 @@ export class Editor extends React.Component {
 
   renderMentionList = mentionListProps =>
     this.props.renderMentionList ? (
-      props.renderMentionList(mentionListProps)
+      this.props.renderMentionList(mentionListProps)
     ) : (
       <MentionList
         displayKey={this.props.displayKey || 'username'}
