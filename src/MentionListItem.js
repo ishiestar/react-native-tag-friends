@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   text: {
+    flex: 1,
     alignSelf: 'center',
     marginLeft: 12,
     marginBottom: 4,
